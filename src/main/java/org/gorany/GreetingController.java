@@ -21,6 +21,9 @@ public class GreetingController extends TextWebSocketHandler {
 	public void handleTextMessage(WebSocketSession session, TextMessage message) throws InterruptedException, IOException {
 		System.out.println("message------------------------>" + message);
 		Map<String, String> value =  new Gson().fromJson(message.getPayload(), Map.class);
+		for(WebSocketSession webSocketSession : sessions) {
+			webSocketSession.sendMessage(new TextMessage("Hello " + value.get("name") + " !"));
+		}
 		session.sendMessage(new TextMessage(value.get("name")));
 		System.out.println(value.get("name"));
 	}
