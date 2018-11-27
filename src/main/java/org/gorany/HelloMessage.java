@@ -1,26 +1,22 @@
 package org.gorany;
 
+import lombok.Data;
+
+@Data
 public class HelloMessage {
 
-	private String name;
-	
-	public HelloMessage() {
+	private String from;
+    private String text;
+    private String time;
+    
+	public HelloMessage(String from, String text, String time) {
 		
-	}
-
-	public HelloMessage(String name) {
-		
-		this.name = name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+		this.from = from;
+		this.text = text;
+		this.time = time;
 	}
 	
+    
 	
 	
 }

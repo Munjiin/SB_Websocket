@@ -1,20 +1,36 @@
 package org.gorany;
 
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.util.HtmlUtils;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-@Controller
-public class GreetingController {
+import org.springframework.stereotype.Component;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-	@MessageMapping("/hello") //hello api로 메세지를 보내면 메소드가 호출
-	@SendTo("/topic/greetings") //리턴 값은 브로드캐스팅
-	public Greeting greeting(HelloMessage message) throws Exception{
-		Thread.sleep(1000);
-		return new Greeting(HtmlUtils.htmlEscape(message.getName()));
+import com.google.gson.Gson;
+
+@Component
+public class GreetingController extends TextWebSocketHandler {
+
+	List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
+
+	@Override
+	public void handleTextMessage(WebSocketSession session, TextMessage message) throws InterruptedException, IOException {
+		System.out.println("message------------------------>" + message);
+		Map<String, String> value =  new Gson().fromJson(message.getPayload(), Map.class);
+		session.sendMessage(new TextMessage(value.get("name")));
+		System.out.println(value.get("name"));
 	}
-
+	
+	@Override
+	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+		sessions.add(session);
+	}
+	
    
 
 }
+
