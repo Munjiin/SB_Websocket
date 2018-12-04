@@ -1,4 +1,4 @@
-package org.gorany;
+package org.gorany.domain;
 
 import lombok.Data;
 

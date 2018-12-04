@@ -1,4 +1,4 @@
-package org.gorany;
+package org.gorany.ws;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,18 +20,22 @@ public class GreetingController extends TextWebSocketHandler {
 	@Override
 	public void handleTextMessage(WebSocketSession session, TextMessage message) throws InterruptedException, IOException {
 		System.out.println("message------------------------>" + message);
+		
+
 		Map<String, String> value =  new Gson().fromJson(message.getPayload(), Map.class);
 		for(WebSocketSession webSocketSession : sessions) {
-			webSocketSession.sendMessage(new TextMessage("Hello " + value.get("name") + " !"));
+			webSocketSession.sendMessage(new TextMessage("gpio from Raspberry pi " + value.get("name")));
 		}
 		session.sendMessage(new TextMessage(value.get("name")));
-		System.out.println(value.get("name"));
+		System.out.println("gpio from Raspberry pi : " + value.get("name"));
 	}
 	
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		sessions.add(session);
 	}
+	
+	
 	
    
 
